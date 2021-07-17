@@ -1,0 +1,5 @@
+.* {print_line(yytext,count);count+=2;}
+
+
+{line} {}
+[^{space}/{label}/{number}/{line}]+ {fprintf(outputfile,"%s\n",yytext);}

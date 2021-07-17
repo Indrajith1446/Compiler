@@ -1,0 +1,116 @@
+
+
+%{
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include "prog.h"
+#include "prog.c"
+int yylex();
+int yywrap();
+struct regpool * Reg;
+FILE *outputfile;
+int printval;
+int loopflag[3];
+int yyerror(char const *s);
+
+%}
+
+%union{
+struct tnode * tn;
+struct Gsymbol * gn;
+int i;
+char *ch;
+}
+
+%type <gn> ID DeclList Decl VarList Declerations
+%type <tn> expr program NUM END AsgStmt OutputStmt InputStmt VAR Stmt Slist E IfStmt WhileStmt BreakStmt ContinueStmt
+%token NUM PLUS END MINUS DIV MUL ID BEGN READ WRITE EQUAL SEMCL LP RP IF THEN ENDIF BREAK CONTINUE COMMA DECL ENDDECL INT STR
+ELSE WHILE DO ENDWHILE LT GT NOT VAR
+%right EQUAL
+%left PLUS MINUS
+%left MUL DIV
+
+
+%%
+
+start : Declerations program {generate($2);}
+      ;
+program : BEGN Slist END SEMCL {$$=$2;}
+      | BEGN END SEMCL  {$$=NULL;}
+      ;
+Declerations : DECL DeclList ENDDECL {$$=$2;}
+      | DECL ENDDECL  {}
+      ;
+DeclList : DeclList Decl {$$=$2;}
+      | Decl {$$=$1;}
+      ;
+Decl : Type VarList SEMCL {$$=$2;}
+      ;
+Type : INT {}
+      | STR {}
+      ;
+VarList : VarList COMMA ID {$$=$3;}
+      | ID {printsymbols($1);$$=$1;}
+      ;
+Slist : Slist Stmt {$$=connector($1,$2);}
+      | Stmt {$$=$1;}
+      ;
+Stmt : InputStmt {$$=$1;}
+      | OutputStmt {$$=$1;}
+      | AsgStmt {$$=$1;}
+      | IfStmt {$$=$1;}
+      | WhileStmt {$$=$1;}
+      | BreakStmt {$$=$1;}
+      | ContinueStmt {$$=$1;}
+      ;
+InputStmt : READ LP expr RP SEMCL {$$=Inode($3);}
+      ;
+OutputStmt : WRITE LP expr RP SEMCL {$$=Onode($3);}
+      ;
+AsgStmt : expr EQUAL expr SEMCL {$$=opnode('=',$1,$3);}
+      ;
+IfStmt : IF LP E RP THEN Slist ELSE Slist ENDIF SEMCL {struct tnode *t;
+        t=connector($6,$8);$$=ifelsenode($3,t);}
+      | IF LP E RP THEN Slist ENDIF SEMCL {$$=ifnode($3,$6);}
+      ;
+WhileStmt : WHILE LP E RP DO Slist ENDWHILE SEMCL {$$=whilenode($3,$6);}
+      ;
+BreakStmt : BREAK SEMCL {$$=breaknode();}
+      ;
+ContinueStmt : CONTINUE SEMCL {$$=continuenode();}
+      ;
+E : expr LT expr {$$=relnode("<",$1,$3);}
+      | expr GT expr {$$=relnode(">",$1,$3);}
+      | expr LT EQUAL expr {$$=relnode("<=",$1,$4);}
+      | expr GT EQUAL expr {$$=relnode(">=",$1,$4);}
+      | expr NOT EQUAL expr {$$=relnode("!=",$1,$4);}
+      | expr EQUAL EQUAL expr {$$=relnode("==",$1,$4);}
+      ;
+expr : expr PLUS expr   {$$=opnode('+',$1,$3);}
+      | expr MUL expr   {$$=opnode('*',$1,$3);}
+      | expr MINUS expr {$$=opnode('-',$1,$3);}
+      | expr DIV expr   {$$=opnode('/',$1,$3);}
+      | LP expr RP   {$$=$2;}
+      | NUM            {$$=$1;}
+      | VAR           {$$=$1;}
+      ;
+
+%%
+
+int yyerror(char const *s)
+{
+  printf("yyerror %s",s);
+}
+int main()
+{
+  loopflag[0]=0;
+  outputfile=fopen("input.xsm","w");
+  Reg=(struct regpool *)malloc(sizeof(struct regpool));
+  Reg->reg=-1;
+  Reg->label=-1;
+  fprintf(outputfile,"%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",0,2056,0,0,0,0,0,0);
+  inp();
+  yyparse();
+  return 0;
+}
