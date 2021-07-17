@@ -1,0 +1,3287 @@
+Terminals unused in grammar
+
+   VAR
+   LID
+   PM
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: TypeDefBlock ClassDefBlock GDeclBlock FdefBlock MainBlock
+    2        | TypeDefBlock ClassDefBlock GDeclBlock MainBlock
+
+    3 TypeDefBlock: TYPE TypeDefList ENDTYPE
+    4             | %empty
+
+    5 TypeDefList: TypeDefList TypeDef
+    6            | TypeDef
+
+    7 TypeDef: ID LCB FieldDeclList RCB
+
+    8 FieldDeclList: FieldDeclList FieldDecl
+    9              | FieldDecl
+
+   10 FieldDecl: TypeName ID SEMCL
+
+   11 TypeName: INT
+   12         | STR
+   13         | ID
+
+   14 ClassDefBlock: CLASS ClassDefList ENDCLASS
+   15              | %empty
+
+   16 ClassDefList: ClassDefList ClassDef
+   17             | ClassDef
+
+   18 ClassDef: Cname LCB DECL FieldLists MethodDecl ENDDECL MethodDefns RCB
+   19         | Cname LCB DECL MethodDecl ENDDECL MethodDefns RCB
+   20         | Cname LCB DECL FieldLists ENDDECL MethodDefns RCB
+
+   21 Cname: ID
+   22      | ID EXTENDS ID
+
+   23 FieldLists: FieldLists Fld
+   24           | Fld
+
+   25 Fld: ID ID SEMCL
+
+   26 MethodDecl: MethodDecl MDecl
+   27           | MDecl
+
+   28 MDecl: ID ID LP ParamList RP SEMCL
+
+   29 MethodDefns: MethodDefns Fdef
+   30            | Fdef
+
+   31 GDeclBlock: DECL GDeclList ENDDECL
+   32           | DECL ENDDECL
+   33           | %empty
+
+   34 GDeclList: GDeclList GDecl
+   35          | GDecl
+
+   36 GDecl: TypeName GidList SEMCL
+
+   37 GidList: GidList COMMA GID
+   38        | GID
+
+   39 GID: ID LP ParamList RP
+   40    | ID LSB NUP RSB
+   41    | ID
+
+   42 FdefBlock: FdefBlock Fdef
+   43          | Fdef
+
+   44 MainBlock: TypeName MAIN LP RP LCB LdeclBlock Body RCB
+
+   45 Fdef: TypeName ID LP ParamList RP LCB LdeclBlock Body RCB
+
+   46 ParamList: ParamList COMMA Param
+   47          | Param
+   48          | %empty
+
+   49 Param: TypeName ID
+
+   50 LdeclBlock: DECL LDecList ENDDECL
+   51           | DECL ENDDECL
+   52           | %empty
+
+   53 LDecList: LDecList LDecl
+   54         | LDecl
+
+   55 LDecl: TypeName IdList SEMCL
+
+   56 IdList: IdList COMMA ID
+   57       | ID
+
+   58 ArgList: ArgList COMMA expr
+   59        | expr
+   60        | %empty
+
+   61 Body: BEGN Slist END
+   62     | BEGN END
+
+   63 Slist: Slist Stmt
+   64      | Stmt
+
+   65 Stmt: InputStmt
+   66     | OutputStmt
+   67     | AsgStmt
+   68     | IfStmt
+   69     | WhileStmt
+   70     | BreakStmt
+   71     | ContinueStmt
+   72     | ReturnStmt
+   73     | AllocStmt
+   74     | FreeStmt
+   75     | NewStmt
+   76     | DeleteStmt
+
+   77 InputStmt: READ LP expr RP SEMCL
+
+   78 OutputStmt: WRITE LP expr RP SEMCL
+
+   79 AsgStmt: ID EQUAL expr SEMCL
+   80        | FIELD EQUAL expr SEMCL
+
+   81 IfStmt: IF LP E RP THEN Slist ELSE Slist ENDIF SEMCL
+   82       | IF LP E RP THEN Slist ENDIF SEMCL
+
+   83 WhileStmt: WHILE LP E RP DO Slist ENDWHILE SEMCL
+
+   84 BreakStmt: BREAK SEMCL
+
+   85 ContinueStmt: CONTINUE SEMCL
+
+   86 ReturnStmt: RETURN expr SEMCL
+   87           | RETURN SEMCL
+
+   88 AllocStmt: ID EQUAL ALLOC LP RP SEMCL
+   89          | FIELD EQUAL ALLOC LP RP SEMCL
+
+   90 FreeStmt: FREE LP ID RP SEMCL
+   91         | FREE LP FIELD RP SEMCL
+
+   92 NewStmt: ID EQUAL NEW LP ID RP SEMCL
+   93        | FIELD EQUAL NEW LP ID RP SEMCL
+
+   94 DeleteStmt: DELETE LP FIELD RP SEMCL
+
+   95 FIELD: ID DOT ID
+   96      | FIELD DOT ID
+   97      | SELF DOT ID
+
+   98 FieldFuntion: SELF DOT ID LP ArgList RP
+   99             | ID DOT ID LP ArgList RP
+  100             | FIELD DOT ID LP ArgList RP
+
+  101 E: expr LT expr
+  102  | expr GT expr
+  103  | expr LT EQUAL expr
+  104  | expr GT EQUAL expr
+  105  | expr NOT EQUAL expr
+  106  | expr EQUAL EQUAL expr
+
+  107 expr: expr PLUS expr
+  108     | expr MUL expr
+  109     | expr MINUS expr
+  110     | expr DIV expr
+  111     | expr MOD expr
+  112     | LP expr RP
+  113     | NUM
+  114     | STRING
+  115     | FIELD
+  116     | FieldFuntion
+  117     | INIT LP RP
+  118     | NUL
+  119     | ID
+  120     | ID LP ArgList RP
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+NUM (258) 113
+PLUS (259) 107
+END (260) 61 62
+MINUS (261) 109
+DIV (262) 110
+MUL (263) 108
+MOD (264) 111
+ID (265) 7 10 13 21 22 25 28 39 40 41 45 49 56 57 79 88 90 92 93 95
+    96 97 98 99 100 119 120
+BEGN (266) 61 62
+READ (267) 77
+WRITE (268) 78
+EQUAL (269) 79 80 88 89 92 93 103 104 105 106
+SEMCL (270) 10 25 28 36 55 77 78 79 80 81 82 83 84 85 86 87 88 89 90
+    91 92 93 94
+LP (271) 28 39 44 45 77 78 81 82 83 88 89 90 91 92 93 94 98 99 100
+    112 117 120
+RP (272) 28 39 44 45 77 78 81 82 83 88 89 90 91 92 93 94 98 99 100
+    112 117 120
+IF (273) 81 82
+THEN (274) 81 82
+ENDIF (275) 81 82
+BREAK (276) 84
+CONTINUE (277) 85
+COMMA (278) 37 46 56 58
+DECL (279) 18 19 20 31 32 50 51
+ENDDECL (280) 18 19 20 31 32 50 51
+INT (281) 11
+STR (282) 12
+ELSE (283) 81
+WHILE (284) 83
+DO (285) 83
+ENDWHILE (286) 83
+LT (287) 101 103
+GT (288) 102 104
+NOT (289) 105
+VAR (290)
+NUP (291) 40
+LID (292)
+LSB (293) 40
+RSB (294) 40
+STRING (295) 114
+MAIN (296) 44
+LCB (297) 7 18 19 20 44 45
+RCB (298) 7 18 19 20 44 45
+PM (299)
+RETURN (300) 86 87
+TYPE (301) 3
+ENDTYPE (302) 3
+DOT (303) 95 96 97 98 99 100
+ALLOC (304) 88 89
+FREE (305) 90 91
+INIT (306) 117
+NUL (307) 118
+CLASS (308) 14
+ENDCLASS (309) 14
+EXTENDS (310) 22
+NEW (311) 92 93
+SELF (312) 97 98
+DELETE (313) 94
+
+
+Nonterminals, with rules where they appear
+
+$accept (59)
+    on left: 0
+Program (60)
+    on left: 1 2, on right: 0
+TypeDefBlock (61)
+    on left: 3 4, on right: 1 2
+TypeDefList (62)
+    on left: 5 6, on right: 3 5
+TypeDef (63)
+    on left: 7, on right: 5 6
+FieldDeclList (64)
+    on left: 8 9, on right: 7 8
+FieldDecl (65)
+    on left: 10, on right: 8 9
+TypeName (66)
+    on left: 11 12 13, on right: 10 36 44 45 49 55
+ClassDefBlock (67)
+    on left: 14 15, on right: 1 2
+ClassDefList (68)
+    on left: 16 17, on right: 14 16
+ClassDef (69)
+    on left: 18 19 20, on right: 16 17
+Cname (70)
+    on left: 21 22, on right: 18 19 20
+FieldLists (71)
+    on left: 23 24, on right: 18 20 23
+Fld (72)
+    on left: 25, on right: 23 24
+MethodDecl (73)
+    on left: 26 27, on right: 18 19 26
+MDecl (74)
+    on left: 28, on right: 26 27
+MethodDefns (75)
+    on left: 29 30, on right: 18 19 20 29
+GDeclBlock (76)
+    on left: 31 32 33, on right: 1 2
+GDeclList (77)
+    on left: 34 35, on right: 31 34
+GDecl (78)
+    on left: 36, on right: 34 35
+GidList (79)
+    on left: 37 38, on right: 36 37
+GID (80)
+    on left: 39 40 41, on right: 37 38
+FdefBlock (81)
+    on left: 42 43, on right: 1 42
+MainBlock (82)
+    on left: 44, on right: 1 2
+Fdef (83)
+    on left: 45, on right: 29 30 42 43
+ParamList (84)
+    on left: 46 47 48, on right: 28 39 45 46
+Param (85)
+    on left: 49, on right: 46 47
+LdeclBlock (86)
+    on left: 50 51 52, on right: 44 45
+LDecList (87)
+    on left: 53 54, on right: 50 53
+LDecl (88)
+    on left: 55, on right: 53 54
+IdList (89)
+    on left: 56 57, on right: 55 56
+ArgList (90)
+    on left: 58 59 60, on right: 58 98 99 100 120
+Body (91)
+    on left: 61 62, on right: 44 45
+Slist (92)
+    on left: 63 64, on right: 61 63 81 82 83
+Stmt (93)
+    on left: 65 66 67 68 69 70 71 72 73 74 75 76, on right: 63 64
+InputStmt (94)
+    on left: 77, on right: 65
+OutputStmt (95)
+    on left: 78, on right: 66
+AsgStmt (96)
+    on left: 79 80, on right: 67
+IfStmt (97)
+    on left: 81 82, on right: 68
+WhileStmt (98)
+    on left: 83, on right: 69
+BreakStmt (99)
+    on left: 84, on right: 70
+ContinueStmt (100)
+    on left: 85, on right: 71
+ReturnStmt (101)
+    on left: 86 87, on right: 72
+AllocStmt (102)
+    on left: 88 89, on right: 73
+FreeStmt (103)
+    on left: 90 91, on right: 74
+NewStmt (104)
+    on left: 92 93, on right: 75
+DeleteStmt (105)
+    on left: 94, on right: 76
+FIELD (106)
+    on left: 95 96 97, on right: 80 89 91 93 94 96 100 115
+FieldFuntion (107)
+    on left: 98 99 100, on right: 116
+E (108)
+    on left: 101 102 103 104 105 106, on right: 81 82 83
+expr (109)
+    on left: 107 108 109 110 111 112 113 114 115 116 117 118 119 120,
+    on right: 58 59 77 78 79 80 86 101 102 103 104 105 106 107 108
+    109 110 111 112
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    TYPE  shift, and go to state 1
+
+    $default  reduce using rule 4 (TypeDefBlock)
+
+    Program       go to state 2
+    TypeDefBlock  go to state 3
+
+
+State 1
+
+    3 TypeDefBlock: TYPE . TypeDefList ENDTYPE
+
+    ID  shift, and go to state 4
+
+    TypeDefList  go to state 5
+    TypeDef      go to state 6
+
+
+State 2
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 7
+
+
+State 3
+
+    1 Program: TypeDefBlock . ClassDefBlock GDeclBlock FdefBlock MainBlock
+    2        | TypeDefBlock . ClassDefBlock GDeclBlock MainBlock
+
+    CLASS  shift, and go to state 8
+
+    $default  reduce using rule 15 (ClassDefBlock)
+
+    ClassDefBlock  go to state 9
+
+
+State 4
+
+    7 TypeDef: ID . LCB FieldDeclList RCB
+
+    LCB  shift, and go to state 10
+
+
+State 5
+
+    3 TypeDefBlock: TYPE TypeDefList . ENDTYPE
+    5 TypeDefList: TypeDefList . TypeDef
+
+    ID       shift, and go to state 4
+    ENDTYPE  shift, and go to state 11
+
+    TypeDef  go to state 12
+
+
+State 6
+
+    6 TypeDefList: TypeDef .
+
+    $default  reduce using rule 6 (TypeDefList)
+
+
+State 7
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 8
+
+   14 ClassDefBlock: CLASS . ClassDefList ENDCLASS
+
+    ID  shift, and go to state 13
+
+    ClassDefList  go to state 14
+    ClassDef      go to state 15
+    Cname         go to state 16
+
+
+State 9
+
+    1 Program: TypeDefBlock ClassDefBlock . GDeclBlock FdefBlock MainBlock
+    2        | TypeDefBlock ClassDefBlock . GDeclBlock MainBlock
+
+    DECL  shift, and go to state 17
+
+    $default  reduce using rule 33 (GDeclBlock)
+
+    GDeclBlock  go to state 18
+
+
+State 10
+
+    7 TypeDef: ID LCB . FieldDeclList RCB
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    FieldDeclList  go to state 22
+    FieldDecl      go to state 23
+    TypeName       go to state 24
+
+
+State 11
+
+    3 TypeDefBlock: TYPE TypeDefList ENDTYPE .
+
+    $default  reduce using rule 3 (TypeDefBlock)
+
+
+State 12
+
+    5 TypeDefList: TypeDefList TypeDef .
+
+    $default  reduce using rule 5 (TypeDefList)
+
+
+State 13
+
+   21 Cname: ID .
+   22      | ID . EXTENDS ID
+
+    EXTENDS  shift, and go to state 25
+
+    $default  reduce using rule 21 (Cname)
+
+
+State 14
+
+   14 ClassDefBlock: CLASS ClassDefList . ENDCLASS
+   16 ClassDefList: ClassDefList . ClassDef
+
+    ID        shift, and go to state 13
+    ENDCLASS  shift, and go to state 26
+
+    ClassDef  go to state 27
+    Cname     go to state 16
+
+
+State 15
+
+   17 ClassDefList: ClassDef .
+
+    $default  reduce using rule 17 (ClassDefList)
+
+
+State 16
+
+   18 ClassDef: Cname . LCB DECL FieldLists MethodDecl ENDDECL MethodDefns RCB
+   19         | Cname . LCB DECL MethodDecl ENDDECL MethodDefns RCB
+   20         | Cname . LCB DECL FieldLists ENDDECL MethodDefns RCB
+
+    LCB  shift, and go to state 28
+
+
+State 17
+
+   31 GDeclBlock: DECL . GDeclList ENDDECL
+   32           | DECL . ENDDECL
+
+    ID       shift, and go to state 19
+    ENDDECL  shift, and go to state 29
+    INT      shift, and go to state 20
+    STR      shift, and go to state 21
+
+    TypeName   go to state 30
+    GDeclList  go to state 31
+    GDecl      go to state 32
+
+
+State 18
+
+    1 Program: TypeDefBlock ClassDefBlock GDeclBlock . FdefBlock MainBlock
+    2        | TypeDefBlock ClassDefBlock GDeclBlock . MainBlock
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    TypeName   go to state 33
+    FdefBlock  go to state 34
+    MainBlock  go to state 35
+    Fdef       go to state 36
+
+
+State 19
+
+   13 TypeName: ID .
+
+    $default  reduce using rule 13 (TypeName)
+
+
+State 20
+
+   11 TypeName: INT .
+
+    $default  reduce using rule 11 (TypeName)
+
+
+State 21
+
+   12 TypeName: STR .
+
+    $default  reduce using rule 12 (TypeName)
+
+
+State 22
+
+    7 TypeDef: ID LCB FieldDeclList . RCB
+    8 FieldDeclList: FieldDeclList . FieldDecl
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+    RCB  shift, and go to state 37
+
+    FieldDecl  go to state 38
+    TypeName   go to state 24
+
+
+State 23
+
+    9 FieldDeclList: FieldDecl .
+
+    $default  reduce using rule 9 (FieldDeclList)
+
+
+State 24
+
+   10 FieldDecl: TypeName . ID SEMCL
+
+    ID  shift, and go to state 39
+
+
+State 25
+
+   22 Cname: ID EXTENDS . ID
+
+    ID  shift, and go to state 40
+
+
+State 26
+
+   14 ClassDefBlock: CLASS ClassDefList ENDCLASS .
+
+    $default  reduce using rule 14 (ClassDefBlock)
+
+
+State 27
+
+   16 ClassDefList: ClassDefList ClassDef .
+
+    $default  reduce using rule 16 (ClassDefList)
+
+
+State 28
+
+   18 ClassDef: Cname LCB . DECL FieldLists MethodDecl ENDDECL MethodDefns RCB
+   19         | Cname LCB . DECL MethodDecl ENDDECL MethodDefns RCB
+   20         | Cname LCB . DECL FieldLists ENDDECL MethodDefns RCB
+
+    DECL  shift, and go to state 41
+
+
+State 29
+
+   32 GDeclBlock: DECL ENDDECL .
+
+    $default  reduce using rule 32 (GDeclBlock)
+
+
+State 30
+
+   36 GDecl: TypeName . GidList SEMCL
+
+    ID  shift, and go to state 42
+
+    GidList  go to state 43
+    GID      go to state 44
+
+
+State 31
+
+   31 GDeclBlock: DECL GDeclList . ENDDECL
+   34 GDeclList: GDeclList . GDecl
+
+    ID       shift, and go to state 19
+    ENDDECL  shift, and go to state 45
+    INT      shift, and go to state 20
+    STR      shift, and go to state 21
+
+    TypeName  go to state 30
+    GDecl     go to state 46
+
+
+State 32
+
+   35 GDeclList: GDecl .
+
+    $default  reduce using rule 35 (GDeclList)
+
+
+State 33
+
+   44 MainBlock: TypeName . MAIN LP RP LCB LdeclBlock Body RCB
+   45 Fdef: TypeName . ID LP ParamList RP LCB LdeclBlock Body RCB
+
+    ID    shift, and go to state 47
+    MAIN  shift, and go to state 48
+
+
+State 34
+
+    1 Program: TypeDefBlock ClassDefBlock GDeclBlock FdefBlock . MainBlock
+   42 FdefBlock: FdefBlock . Fdef
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    TypeName   go to state 33
+    MainBlock  go to state 49
+    Fdef       go to state 50
+
+
+State 35
+
+    2 Program: TypeDefBlock ClassDefBlock GDeclBlock MainBlock .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 36
+
+   43 FdefBlock: Fdef .
+
+    $default  reduce using rule 43 (FdefBlock)
+
+
+State 37
+
+    7 TypeDef: ID LCB FieldDeclList RCB .
+
+    $default  reduce using rule 7 (TypeDef)
+
+
+State 38
+
+    8 FieldDeclList: FieldDeclList FieldDecl .
+
+    $default  reduce using rule 8 (FieldDeclList)
+
+
+State 39
+
+   10 FieldDecl: TypeName ID . SEMCL
+
+    SEMCL  shift, and go to state 51
+
+
+State 40
+
+   22 Cname: ID EXTENDS ID .
+
+    $default  reduce using rule 22 (Cname)
+
+
+State 41
+
+   18 ClassDef: Cname LCB DECL . FieldLists MethodDecl ENDDECL MethodDefns RCB
+   19         | Cname LCB DECL . MethodDecl ENDDECL MethodDefns RCB
+   20         | Cname LCB DECL . FieldLists ENDDECL MethodDefns RCB
+
+    ID  shift, and go to state 52
+
+    FieldLists  go to state 53
+    Fld         go to state 54
+    MethodDecl  go to state 55
+    MDecl       go to state 56
+
+
+State 42
+
+   39 GID: ID . LP ParamList RP
+   40    | ID . LSB NUP RSB
+   41    | ID .
+
+    LP   shift, and go to state 57
+    LSB  shift, and go to state 58
+
+    $default  reduce using rule 41 (GID)
+
+
+State 43
+
+   36 GDecl: TypeName GidList . SEMCL
+   37 GidList: GidList . COMMA GID
+
+    SEMCL  shift, and go to state 59
+    COMMA  shift, and go to state 60
+
+
+State 44
+
+   38 GidList: GID .
+
+    $default  reduce using rule 38 (GidList)
+
+
+State 45
+
+   31 GDeclBlock: DECL GDeclList ENDDECL .
+
+    $default  reduce using rule 31 (GDeclBlock)
+
+
+State 46
+
+   34 GDeclList: GDeclList GDecl .
+
+    $default  reduce using rule 34 (GDeclList)
+
+
+State 47
+
+   45 Fdef: TypeName ID . LP ParamList RP LCB LdeclBlock Body RCB
+
+    LP  shift, and go to state 61
+
+
+State 48
+
+   44 MainBlock: TypeName MAIN . LP RP LCB LdeclBlock Body RCB
+
+    LP  shift, and go to state 62
+
+
+State 49
+
+    1 Program: TypeDefBlock ClassDefBlock GDeclBlock FdefBlock MainBlock .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 50
+
+   42 FdefBlock: FdefBlock Fdef .
+
+    $default  reduce using rule 42 (FdefBlock)
+
+
+State 51
+
+   10 FieldDecl: TypeName ID SEMCL .
+
+    $default  reduce using rule 10 (FieldDecl)
+
+
+State 52
+
+   25 Fld: ID . ID SEMCL
+   28 MDecl: ID . ID LP ParamList RP SEMCL
+
+    ID  shift, and go to state 63
+
+
+State 53
+
+   18 ClassDef: Cname LCB DECL FieldLists . MethodDecl ENDDECL MethodDefns RCB
+   20         | Cname LCB DECL FieldLists . ENDDECL MethodDefns RCB
+   23 FieldLists: FieldLists . Fld
+
+    ID       shift, and go to state 52
+    ENDDECL  shift, and go to state 64
+
+    Fld         go to state 65
+    MethodDecl  go to state 66
+    MDecl       go to state 56
+
+
+State 54
+
+   24 FieldLists: Fld .
+
+    $default  reduce using rule 24 (FieldLists)
+
+
+State 55
+
+   19 ClassDef: Cname LCB DECL MethodDecl . ENDDECL MethodDefns RCB
+   26 MethodDecl: MethodDecl . MDecl
+
+    ID       shift, and go to state 67
+    ENDDECL  shift, and go to state 68
+
+    MDecl  go to state 69
+
+
+State 56
+
+   27 MethodDecl: MDecl .
+
+    $default  reduce using rule 27 (MethodDecl)
+
+
+State 57
+
+   39 GID: ID LP . ParamList RP
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    $default  reduce using rule 48 (ParamList)
+
+    TypeName   go to state 70
+    ParamList  go to state 71
+    Param      go to state 72
+
+
+State 58
+
+   40 GID: ID LSB . NUP RSB
+
+    NUP  shift, and go to state 73
+
+
+State 59
+
+   36 GDecl: TypeName GidList SEMCL .
+
+    $default  reduce using rule 36 (GDecl)
+
+
+State 60
+
+   37 GidList: GidList COMMA . GID
+
+    ID  shift, and go to state 42
+
+    GID  go to state 74
+
+
+State 61
+
+   45 Fdef: TypeName ID LP . ParamList RP LCB LdeclBlock Body RCB
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    $default  reduce using rule 48 (ParamList)
+
+    TypeName   go to state 70
+    ParamList  go to state 75
+    Param      go to state 72
+
+
+State 62
+
+   44 MainBlock: TypeName MAIN LP . RP LCB LdeclBlock Body RCB
+
+    RP  shift, and go to state 76
+
+
+State 63
+
+   25 Fld: ID ID . SEMCL
+   28 MDecl: ID ID . LP ParamList RP SEMCL
+
+    SEMCL  shift, and go to state 77
+    LP     shift, and go to state 78
+
+
+State 64
+
+   20 ClassDef: Cname LCB DECL FieldLists ENDDECL . MethodDefns RCB
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    TypeName     go to state 79
+    MethodDefns  go to state 80
+    Fdef         go to state 81
+
+
+State 65
+
+   23 FieldLists: FieldLists Fld .
+
+    $default  reduce using rule 23 (FieldLists)
+
+
+State 66
+
+   18 ClassDef: Cname LCB DECL FieldLists MethodDecl . ENDDECL MethodDefns RCB
+   26 MethodDecl: MethodDecl . MDecl
+
+    ID       shift, and go to state 67
+    ENDDECL  shift, and go to state 82
+
+    MDecl  go to state 69
+
+
+State 67
+
+   28 MDecl: ID . ID LP ParamList RP SEMCL
+
+    ID  shift, and go to state 83
+
+
+State 68
+
+   19 ClassDef: Cname LCB DECL MethodDecl ENDDECL . MethodDefns RCB
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    TypeName     go to state 79
+    MethodDefns  go to state 84
+    Fdef         go to state 81
+
+
+State 69
+
+   26 MethodDecl: MethodDecl MDecl .
+
+    $default  reduce using rule 26 (MethodDecl)
+
+
+State 70
+
+   49 Param: TypeName . ID
+
+    ID  shift, and go to state 85
+
+
+State 71
+
+   39 GID: ID LP ParamList . RP
+   46 ParamList: ParamList . COMMA Param
+
+    RP     shift, and go to state 86
+    COMMA  shift, and go to state 87
+
+
+State 72
+
+   47 ParamList: Param .
+
+    $default  reduce using rule 47 (ParamList)
+
+
+State 73
+
+   40 GID: ID LSB NUP . RSB
+
+    RSB  shift, and go to state 88
+
+
+State 74
+
+   37 GidList: GidList COMMA GID .
+
+    $default  reduce using rule 37 (GidList)
+
+
+State 75
+
+   45 Fdef: TypeName ID LP ParamList . RP LCB LdeclBlock Body RCB
+   46 ParamList: ParamList . COMMA Param
+
+    RP     shift, and go to state 89
+    COMMA  shift, and go to state 87
+
+
+State 76
+
+   44 MainBlock: TypeName MAIN LP RP . LCB LdeclBlock Body RCB
+
+    LCB  shift, and go to state 90
+
+
+State 77
+
+   25 Fld: ID ID SEMCL .
+
+    $default  reduce using rule 25 (Fld)
+
+
+State 78
+
+   28 MDecl: ID ID LP . ParamList RP SEMCL
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    $default  reduce using rule 48 (ParamList)
+
+    TypeName   go to state 70
+    ParamList  go to state 91
+    Param      go to state 72
+
+
+State 79
+
+   45 Fdef: TypeName . ID LP ParamList RP LCB LdeclBlock Body RCB
+
+    ID  shift, and go to state 47
+
+
+State 80
+
+   20 ClassDef: Cname LCB DECL FieldLists ENDDECL MethodDefns . RCB
+   29 MethodDefns: MethodDefns . Fdef
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+    RCB  shift, and go to state 92
+
+    TypeName  go to state 79
+    Fdef      go to state 93
+
+
+State 81
+
+   30 MethodDefns: Fdef .
+
+    $default  reduce using rule 30 (MethodDefns)
+
+
+State 82
+
+   18 ClassDef: Cname LCB DECL FieldLists MethodDecl ENDDECL . MethodDefns RCB
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    TypeName     go to state 79
+    MethodDefns  go to state 94
+    Fdef         go to state 81
+
+
+State 83
+
+   28 MDecl: ID ID . LP ParamList RP SEMCL
+
+    LP  shift, and go to state 78
+
+
+State 84
+
+   19 ClassDef: Cname LCB DECL MethodDecl ENDDECL MethodDefns . RCB
+   29 MethodDefns: MethodDefns . Fdef
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+    RCB  shift, and go to state 95
+
+    TypeName  go to state 79
+    Fdef      go to state 93
+
+
+State 85
+
+   49 Param: TypeName ID .
+
+    $default  reduce using rule 49 (Param)
+
+
+State 86
+
+   39 GID: ID LP ParamList RP .
+
+    $default  reduce using rule 39 (GID)
+
+
+State 87
+
+   46 ParamList: ParamList COMMA . Param
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+
+    TypeName  go to state 70
+    Param     go to state 96
+
+
+State 88
+
+   40 GID: ID LSB NUP RSB .
+
+    $default  reduce using rule 40 (GID)
+
+
+State 89
+
+   45 Fdef: TypeName ID LP ParamList RP . LCB LdeclBlock Body RCB
+
+    LCB  shift, and go to state 97
+
+
+State 90
+
+   44 MainBlock: TypeName MAIN LP RP LCB . LdeclBlock Body RCB
+
+    DECL  shift, and go to state 98
+
+    $default  reduce using rule 52 (LdeclBlock)
+
+    LdeclBlock  go to state 99
+
+
+State 91
+
+   28 MDecl: ID ID LP ParamList . RP SEMCL
+   46 ParamList: ParamList . COMMA Param
+
+    RP     shift, and go to state 100
+    COMMA  shift, and go to state 87
+
+
+State 92
+
+   20 ClassDef: Cname LCB DECL FieldLists ENDDECL MethodDefns RCB .
+
+    $default  reduce using rule 20 (ClassDef)
+
+
+State 93
+
+   29 MethodDefns: MethodDefns Fdef .
+
+    $default  reduce using rule 29 (MethodDefns)
+
+
+State 94
+
+   18 ClassDef: Cname LCB DECL FieldLists MethodDecl ENDDECL MethodDefns . RCB
+   29 MethodDefns: MethodDefns . Fdef
+
+    ID   shift, and go to state 19
+    INT  shift, and go to state 20
+    STR  shift, and go to state 21
+    RCB  shift, and go to state 101
+
+    TypeName  go to state 79
+    Fdef      go to state 93
+
+
+State 95
+
+   19 ClassDef: Cname LCB DECL MethodDecl ENDDECL MethodDefns RCB .
+
+    $default  reduce using rule 19 (ClassDef)
+
+
+State 96
+
+   46 ParamList: ParamList COMMA Param .
+
+    $default  reduce using rule 46 (ParamList)
+
+
+State 97
+
+   45 Fdef: TypeName ID LP ParamList RP LCB . LdeclBlock Body RCB
+
+    DECL  shift, and go to state 98
+
+    $default  reduce using rule 52 (LdeclBlock)
+
+    LdeclBlock  go to state 102
+
+
+State 98
+
+   50 LdeclBlock: DECL . LDecList ENDDECL
+   51           | DECL . ENDDECL
+
+    ID       shift, and go to state 19
+    ENDDECL  shift, and go to state 103
+    INT      shift, and go to state 20
+    STR      shift, and go to state 21
+
+    TypeName  go to state 104
+    LDecList  go to state 105
+    LDecl     go to state 106
+
+
+State 99
+
+   44 MainBlock: TypeName MAIN LP RP LCB LdeclBlock . Body RCB
+
+    BEGN  shift, and go to state 107
+
+    Body  go to state 108
+
+
+State 100
+
+   28 MDecl: ID ID LP ParamList RP . SEMCL
+
+    SEMCL  shift, and go to state 109
+
+
+State 101
+
+   18 ClassDef: Cname LCB DECL FieldLists MethodDecl ENDDECL MethodDefns RCB .
+
+    $default  reduce using rule 18 (ClassDef)
+
+
+State 102
+
+   45 Fdef: TypeName ID LP ParamList RP LCB LdeclBlock . Body RCB
+
+    BEGN  shift, and go to state 107
+
+    Body  go to state 110
+
+
+State 103
+
+   51 LdeclBlock: DECL ENDDECL .
+
+    $default  reduce using rule 51 (LdeclBlock)
+
+
+State 104
+
+   55 LDecl: TypeName . IdList SEMCL
+
+    ID  shift, and go to state 111
+
+    IdList  go to state 112
+
+
+State 105
+
+   50 LdeclBlock: DECL LDecList . ENDDECL
+   53 LDecList: LDecList . LDecl
+
+    ID       shift, and go to state 19
+    ENDDECL  shift, and go to state 113
+    INT      shift, and go to state 20
+    STR      shift, and go to state 21
+
+    TypeName  go to state 104
+    LDecl     go to state 114
+
+
+State 106
+
+   54 LDecList: LDecl .
+
+    $default  reduce using rule 54 (LDecList)
+
+
+State 107
+
+   61 Body: BEGN . Slist END
+   62     | BEGN . END
+
+    END       shift, and go to state 115
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Slist         go to state 127
+    Stmt          go to state 128
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 108
+
+   44 MainBlock: TypeName MAIN LP RP LCB LdeclBlock Body . RCB
+
+    RCB  shift, and go to state 142
+
+
+State 109
+
+   28 MDecl: ID ID LP ParamList RP SEMCL .
+
+    $default  reduce using rule 28 (MDecl)
+
+
+State 110
+
+   45 Fdef: TypeName ID LP ParamList RP LCB LdeclBlock Body . RCB
+
+    RCB  shift, and go to state 143
+
+
+State 111
+
+   57 IdList: ID .
+
+    $default  reduce using rule 57 (IdList)
+
+
+State 112
+
+   55 LDecl: TypeName IdList . SEMCL
+   56 IdList: IdList . COMMA ID
+
+    SEMCL  shift, and go to state 144
+    COMMA  shift, and go to state 145
+
+
+State 113
+
+   50 LdeclBlock: DECL LDecList ENDDECL .
+
+    $default  reduce using rule 50 (LdeclBlock)
+
+
+State 114
+
+   53 LDecList: LDecList LDecl .
+
+    $default  reduce using rule 53 (LDecList)
+
+
+State 115
+
+   62 Body: BEGN END .
+
+    $default  reduce using rule 62 (Body)
+
+
+State 116
+
+   79 AsgStmt: ID . EQUAL expr SEMCL
+   88 AllocStmt: ID . EQUAL ALLOC LP RP SEMCL
+   92 NewStmt: ID . EQUAL NEW LP ID RP SEMCL
+   95 FIELD: ID . DOT ID
+
+    EQUAL  shift, and go to state 146
+    DOT    shift, and go to state 147
+
+
+State 117
+
+   77 InputStmt: READ . LP expr RP SEMCL
+
+    LP  shift, and go to state 148
+
+
+State 118
+
+   78 OutputStmt: WRITE . LP expr RP SEMCL
+
+    LP  shift, and go to state 149
+
+
+State 119
+
+   81 IfStmt: IF . LP E RP THEN Slist ELSE Slist ENDIF SEMCL
+   82       | IF . LP E RP THEN Slist ENDIF SEMCL
+
+    LP  shift, and go to state 150
+
+
+State 120
+
+   84 BreakStmt: BREAK . SEMCL
+
+    SEMCL  shift, and go to state 151
+
+
+State 121
+
+   85 ContinueStmt: CONTINUE . SEMCL
+
+    SEMCL  shift, and go to state 152
+
+
+State 122
+
+   83 WhileStmt: WHILE . LP E RP DO Slist ENDWHILE SEMCL
+
+    LP  shift, and go to state 153
+
+
+State 123
+
+   86 ReturnStmt: RETURN . expr SEMCL
+   87           | RETURN . SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    SEMCL   shift, and go to state 156
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 164
+
+
+State 124
+
+   90 FreeStmt: FREE . LP ID RP SEMCL
+   91         | FREE . LP FIELD RP SEMCL
+
+    LP  shift, and go to state 165
+
+
+State 125
+
+   97 FIELD: SELF . DOT ID
+
+    DOT  shift, and go to state 166
+
+
+State 126
+
+   94 DeleteStmt: DELETE . LP FIELD RP SEMCL
+
+    LP  shift, and go to state 167
+
+
+State 127
+
+   61 Body: BEGN Slist . END
+   63 Slist: Slist . Stmt
+
+    END       shift, and go to state 168
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Stmt          go to state 169
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 128
+
+   64 Slist: Stmt .
+
+    $default  reduce using rule 64 (Slist)
+
+
+State 129
+
+   65 Stmt: InputStmt .
+
+    $default  reduce using rule 65 (Stmt)
+
+
+State 130
+
+   66 Stmt: OutputStmt .
+
+    $default  reduce using rule 66 (Stmt)
+
+
+State 131
+
+   67 Stmt: AsgStmt .
+
+    $default  reduce using rule 67 (Stmt)
+
+
+State 132
+
+   68 Stmt: IfStmt .
+
+    $default  reduce using rule 68 (Stmt)
+
+
+State 133
+
+   69 Stmt: WhileStmt .
+
+    $default  reduce using rule 69 (Stmt)
+
+
+State 134
+
+   70 Stmt: BreakStmt .
+
+    $default  reduce using rule 70 (Stmt)
+
+
+State 135
+
+   71 Stmt: ContinueStmt .
+
+    $default  reduce using rule 71 (Stmt)
+
+
+State 136
+
+   72 Stmt: ReturnStmt .
+
+    $default  reduce using rule 72 (Stmt)
+
+
+State 137
+
+   73 Stmt: AllocStmt .
+
+    $default  reduce using rule 73 (Stmt)
+
+
+State 138
+
+   74 Stmt: FreeStmt .
+
+    $default  reduce using rule 74 (Stmt)
+
+
+State 139
+
+   75 Stmt: NewStmt .
+
+    $default  reduce using rule 75 (Stmt)
+
+
+State 140
+
+   76 Stmt: DeleteStmt .
+
+    $default  reduce using rule 76 (Stmt)
+
+
+State 141
+
+   80 AsgStmt: FIELD . EQUAL expr SEMCL
+   89 AllocStmt: FIELD . EQUAL ALLOC LP RP SEMCL
+   93 NewStmt: FIELD . EQUAL NEW LP ID RP SEMCL
+   96 FIELD: FIELD . DOT ID
+
+    EQUAL  shift, and go to state 170
+    DOT    shift, and go to state 171
+
+
+State 142
+
+   44 MainBlock: TypeName MAIN LP RP LCB LdeclBlock Body RCB .
+
+    $default  reduce using rule 44 (MainBlock)
+
+
+State 143
+
+   45 Fdef: TypeName ID LP ParamList RP LCB LdeclBlock Body RCB .
+
+    $default  reduce using rule 45 (Fdef)
+
+
+State 144
+
+   55 LDecl: TypeName IdList SEMCL .
+
+    $default  reduce using rule 55 (LDecl)
+
+
+State 145
+
+   56 IdList: IdList COMMA . ID
+
+    ID  shift, and go to state 172
+
+
+State 146
+
+   79 AsgStmt: ID EQUAL . expr SEMCL
+   88 AllocStmt: ID EQUAL . ALLOC LP RP SEMCL
+   92 NewStmt: ID EQUAL . NEW LP ID RP SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    ALLOC   shift, and go to state 173
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    NEW     shift, and go to state 174
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 175
+
+
+State 147
+
+   95 FIELD: ID DOT . ID
+
+    ID  shift, and go to state 176
+
+
+State 148
+
+   77 InputStmt: READ LP . expr RP SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 177
+
+
+State 149
+
+   78 OutputStmt: WRITE LP . expr RP SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 178
+
+
+State 150
+
+   81 IfStmt: IF LP . E RP THEN Slist ELSE Slist ENDIF SEMCL
+   82       | IF LP . E RP THEN Slist ENDIF SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    E             go to state 179
+    expr          go to state 180
+
+
+State 151
+
+   84 BreakStmt: BREAK SEMCL .
+
+    $default  reduce using rule 84 (BreakStmt)
+
+
+State 152
+
+   85 ContinueStmt: CONTINUE SEMCL .
+
+    $default  reduce using rule 85 (ContinueStmt)
+
+
+State 153
+
+   83 WhileStmt: WHILE LP . E RP DO Slist ENDWHILE SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    E             go to state 181
+    expr          go to state 180
+
+
+State 154
+
+  113 expr: NUM .
+
+    $default  reduce using rule 113 (expr)
+
+
+State 155
+
+   95 FIELD: ID . DOT ID
+   99 FieldFuntion: ID . DOT ID LP ArgList RP
+  119 expr: ID .
+  120     | ID . LP ArgList RP
+
+    LP   shift, and go to state 182
+    DOT  shift, and go to state 183
+
+    $default  reduce using rule 119 (expr)
+
+
+State 156
+
+   87 ReturnStmt: RETURN SEMCL .
+
+    $default  reduce using rule 87 (ReturnStmt)
+
+
+State 157
+
+  112 expr: LP . expr RP
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 184
+
+
+State 158
+
+  114 expr: STRING .
+
+    $default  reduce using rule 114 (expr)
+
+
+State 159
+
+  117 expr: INIT . LP RP
+
+    LP  shift, and go to state 185
+
+
+State 160
+
+  118 expr: NUL .
+
+    $default  reduce using rule 118 (expr)
+
+
+State 161
+
+   97 FIELD: SELF . DOT ID
+   98 FieldFuntion: SELF . DOT ID LP ArgList RP
+
+    DOT  shift, and go to state 186
+
+
+State 162
+
+   96 FIELD: FIELD . DOT ID
+  100 FieldFuntion: FIELD . DOT ID LP ArgList RP
+  115 expr: FIELD .
+
+    DOT  shift, and go to state 187
+
+    $default  reduce using rule 115 (expr)
+
+
+State 163
+
+  116 expr: FieldFuntion .
+
+    $default  reduce using rule 116 (expr)
+
+
+State 164
+
+   86 ReturnStmt: RETURN expr . SEMCL
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    SEMCL  shift, and go to state 193
+
+
+State 165
+
+   90 FreeStmt: FREE LP . ID RP SEMCL
+   91         | FREE LP . FIELD RP SEMCL
+
+    ID    shift, and go to state 194
+    SELF  shift, and go to state 125
+
+    FIELD  go to state 195
+
+
+State 166
+
+   97 FIELD: SELF DOT . ID
+
+    ID  shift, and go to state 196
+
+
+State 167
+
+   94 DeleteStmt: DELETE LP . FIELD RP SEMCL
+
+    ID    shift, and go to state 197
+    SELF  shift, and go to state 125
+
+    FIELD  go to state 198
+
+
+State 168
+
+   61 Body: BEGN Slist END .
+
+    $default  reduce using rule 61 (Body)
+
+
+State 169
+
+   63 Slist: Slist Stmt .
+
+    $default  reduce using rule 63 (Slist)
+
+
+State 170
+
+   80 AsgStmt: FIELD EQUAL . expr SEMCL
+   89 AllocStmt: FIELD EQUAL . ALLOC LP RP SEMCL
+   93 NewStmt: FIELD EQUAL . NEW LP ID RP SEMCL
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    ALLOC   shift, and go to state 199
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    NEW     shift, and go to state 200
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 201
+
+
+State 171
+
+   96 FIELD: FIELD DOT . ID
+
+    ID  shift, and go to state 202
+
+
+State 172
+
+   56 IdList: IdList COMMA ID .
+
+    $default  reduce using rule 56 (IdList)
+
+
+State 173
+
+   88 AllocStmt: ID EQUAL ALLOC . LP RP SEMCL
+
+    LP  shift, and go to state 203
+
+
+State 174
+
+   92 NewStmt: ID EQUAL NEW . LP ID RP SEMCL
+
+    LP  shift, and go to state 204
+
+
+State 175
+
+   79 AsgStmt: ID EQUAL expr . SEMCL
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    SEMCL  shift, and go to state 205
+
+
+State 176
+
+   95 FIELD: ID DOT ID .
+
+    $default  reduce using rule 95 (FIELD)
+
+
+State 177
+
+   77 InputStmt: READ LP expr . RP SEMCL
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    RP     shift, and go to state 206
+
+
+State 178
+
+   78 OutputStmt: WRITE LP expr . RP SEMCL
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    RP     shift, and go to state 207
+
+
+State 179
+
+   81 IfStmt: IF LP E . RP THEN Slist ELSE Slist ENDIF SEMCL
+   82       | IF LP E . RP THEN Slist ENDIF SEMCL
+
+    RP  shift, and go to state 208
+
+
+State 180
+
+  101 E: expr . LT expr
+  102  | expr . GT expr
+  103  | expr . LT EQUAL expr
+  104  | expr . GT EQUAL expr
+  105  | expr . NOT EQUAL expr
+  106  | expr . EQUAL EQUAL expr
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    EQUAL  shift, and go to state 209
+    LT     shift, and go to state 210
+    GT     shift, and go to state 211
+    NOT    shift, and go to state 212
+
+
+State 181
+
+   83 WhileStmt: WHILE LP E . RP DO Slist ENDWHILE SEMCL
+
+    RP  shift, and go to state 213
+
+
+State 182
+
+  120 expr: ID LP . ArgList RP
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    $default  reduce using rule 60 (ArgList)
+
+    ArgList       go to state 214
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 215
+
+
+State 183
+
+   95 FIELD: ID DOT . ID
+   99 FieldFuntion: ID DOT . ID LP ArgList RP
+
+    ID  shift, and go to state 216
+
+
+State 184
+
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+  112     | LP expr . RP
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    RP     shift, and go to state 217
+
+
+State 185
+
+  117 expr: INIT LP . RP
+
+    RP  shift, and go to state 218
+
+
+State 186
+
+   97 FIELD: SELF DOT . ID
+   98 FieldFuntion: SELF DOT . ID LP ArgList RP
+
+    ID  shift, and go to state 219
+
+
+State 187
+
+   96 FIELD: FIELD DOT . ID
+  100 FieldFuntion: FIELD DOT . ID LP ArgList RP
+
+    ID  shift, and go to state 220
+
+
+State 188
+
+  107 expr: expr PLUS . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 221
+
+
+State 189
+
+  109 expr: expr MINUS . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 222
+
+
+State 190
+
+  110 expr: expr DIV . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 223
+
+
+State 191
+
+  108 expr: expr MUL . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 224
+
+
+State 192
+
+  111 expr: expr MOD . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 225
+
+
+State 193
+
+   86 ReturnStmt: RETURN expr SEMCL .
+
+    $default  reduce using rule 86 (ReturnStmt)
+
+
+State 194
+
+   90 FreeStmt: FREE LP ID . RP SEMCL
+   95 FIELD: ID . DOT ID
+
+    RP   shift, and go to state 226
+    DOT  shift, and go to state 147
+
+
+State 195
+
+   91 FreeStmt: FREE LP FIELD . RP SEMCL
+   96 FIELD: FIELD . DOT ID
+
+    RP   shift, and go to state 227
+    DOT  shift, and go to state 171
+
+
+State 196
+
+   97 FIELD: SELF DOT ID .
+
+    $default  reduce using rule 97 (FIELD)
+
+
+State 197
+
+   95 FIELD: ID . DOT ID
+
+    DOT  shift, and go to state 147
+
+
+State 198
+
+   94 DeleteStmt: DELETE LP FIELD . RP SEMCL
+   96 FIELD: FIELD . DOT ID
+
+    RP   shift, and go to state 228
+    DOT  shift, and go to state 171
+
+
+State 199
+
+   89 AllocStmt: FIELD EQUAL ALLOC . LP RP SEMCL
+
+    LP  shift, and go to state 229
+
+
+State 200
+
+   93 NewStmt: FIELD EQUAL NEW . LP ID RP SEMCL
+
+    LP  shift, and go to state 230
+
+
+State 201
+
+   80 AsgStmt: FIELD EQUAL expr . SEMCL
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+    SEMCL  shift, and go to state 231
+
+
+State 202
+
+   96 FIELD: FIELD DOT ID .
+
+    $default  reduce using rule 96 (FIELD)
+
+
+State 203
+
+   88 AllocStmt: ID EQUAL ALLOC LP . RP SEMCL
+
+    RP  shift, and go to state 232
+
+
+State 204
+
+   92 NewStmt: ID EQUAL NEW LP . ID RP SEMCL
+
+    ID  shift, and go to state 233
+
+
+State 205
+
+   79 AsgStmt: ID EQUAL expr SEMCL .
+
+    $default  reduce using rule 79 (AsgStmt)
+
+
+State 206
+
+   77 InputStmt: READ LP expr RP . SEMCL
+
+    SEMCL  shift, and go to state 234
+
+
+State 207
+
+   78 OutputStmt: WRITE LP expr RP . SEMCL
+
+    SEMCL  shift, and go to state 235
+
+
+State 208
+
+   81 IfStmt: IF LP E RP . THEN Slist ELSE Slist ENDIF SEMCL
+   82       | IF LP E RP . THEN Slist ENDIF SEMCL
+
+    THEN  shift, and go to state 236
+
+
+State 209
+
+  106 E: expr EQUAL . EQUAL expr
+
+    EQUAL  shift, and go to state 237
+
+
+State 210
+
+  101 E: expr LT . expr
+  103  | expr LT . EQUAL expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    EQUAL   shift, and go to state 238
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 239
+
+
+State 211
+
+  102 E: expr GT . expr
+  104  | expr GT . EQUAL expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    EQUAL   shift, and go to state 240
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 241
+
+
+State 212
+
+  105 E: expr NOT . EQUAL expr
+
+    EQUAL  shift, and go to state 242
+
+
+State 213
+
+   83 WhileStmt: WHILE LP E RP . DO Slist ENDWHILE SEMCL
+
+    DO  shift, and go to state 243
+
+
+State 214
+
+   58 ArgList: ArgList . COMMA expr
+  120 expr: ID LP ArgList . RP
+
+    RP     shift, and go to state 244
+    COMMA  shift, and go to state 245
+
+
+State 215
+
+   59 ArgList: expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 59 (ArgList)
+
+
+State 216
+
+   95 FIELD: ID DOT ID .
+   99 FieldFuntion: ID DOT ID . LP ArgList RP
+
+    LP  shift, and go to state 246
+
+    $default  reduce using rule 95 (FIELD)
+
+
+State 217
+
+  112 expr: LP expr RP .
+
+    $default  reduce using rule 112 (expr)
+
+
+State 218
+
+  117 expr: INIT LP RP .
+
+    $default  reduce using rule 117 (expr)
+
+
+State 219
+
+   97 FIELD: SELF DOT ID .
+   98 FieldFuntion: SELF DOT ID . LP ArgList RP
+
+    LP  shift, and go to state 247
+
+    $default  reduce using rule 97 (FIELD)
+
+
+State 220
+
+   96 FIELD: FIELD DOT ID .
+  100 FieldFuntion: FIELD DOT ID . LP ArgList RP
+
+    LP  shift, and go to state 248
+
+    $default  reduce using rule 96 (FIELD)
+
+
+State 221
+
+  107 expr: expr . PLUS expr
+  107     | expr PLUS expr .
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    DIV  shift, and go to state 190
+    MUL  shift, and go to state 191
+    MOD  shift, and go to state 192
+
+    $default  reduce using rule 107 (expr)
+
+
+State 222
+
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  109     | expr MINUS expr .
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    DIV  shift, and go to state 190
+    MUL  shift, and go to state 191
+    MOD  shift, and go to state 192
+
+    $default  reduce using rule 109 (expr)
+
+
+State 223
+
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  110     | expr DIV expr .
+  111     | expr . MOD expr
+
+    $default  reduce using rule 110 (expr)
+
+
+State 224
+
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  108     | expr MUL expr .
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    $default  reduce using rule 108 (expr)
+
+
+State 225
+
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+  111     | expr MOD expr .
+
+    $default  reduce using rule 111 (expr)
+
+
+State 226
+
+   90 FreeStmt: FREE LP ID RP . SEMCL
+
+    SEMCL  shift, and go to state 249
+
+
+State 227
+
+   91 FreeStmt: FREE LP FIELD RP . SEMCL
+
+    SEMCL  shift, and go to state 250
+
+
+State 228
+
+   94 DeleteStmt: DELETE LP FIELD RP . SEMCL
+
+    SEMCL  shift, and go to state 251
+
+
+State 229
+
+   89 AllocStmt: FIELD EQUAL ALLOC LP . RP SEMCL
+
+    RP  shift, and go to state 252
+
+
+State 230
+
+   93 NewStmt: FIELD EQUAL NEW LP . ID RP SEMCL
+
+    ID  shift, and go to state 253
+
+
+State 231
+
+   80 AsgStmt: FIELD EQUAL expr SEMCL .
+
+    $default  reduce using rule 80 (AsgStmt)
+
+
+State 232
+
+   88 AllocStmt: ID EQUAL ALLOC LP RP . SEMCL
+
+    SEMCL  shift, and go to state 254
+
+
+State 233
+
+   92 NewStmt: ID EQUAL NEW LP ID . RP SEMCL
+
+    RP  shift, and go to state 255
+
+
+State 234
+
+   77 InputStmt: READ LP expr RP SEMCL .
+
+    $default  reduce using rule 77 (InputStmt)
+
+
+State 235
+
+   78 OutputStmt: WRITE LP expr RP SEMCL .
+
+    $default  reduce using rule 78 (OutputStmt)
+
+
+State 236
+
+   81 IfStmt: IF LP E RP THEN . Slist ELSE Slist ENDIF SEMCL
+   82       | IF LP E RP THEN . Slist ENDIF SEMCL
+
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Slist         go to state 256
+    Stmt          go to state 128
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 237
+
+  106 E: expr EQUAL EQUAL . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 257
+
+
+State 238
+
+  103 E: expr LT EQUAL . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 258
+
+
+State 239
+
+  101 E: expr LT expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 101 (E)
+
+
+State 240
+
+  104 E: expr GT EQUAL . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 259
+
+
+State 241
+
+  102 E: expr GT expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 102 (E)
+
+
+State 242
+
+  105 E: expr NOT EQUAL . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 260
+
+
+State 243
+
+   83 WhileStmt: WHILE LP E RP DO . Slist ENDWHILE SEMCL
+
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Slist         go to state 261
+    Stmt          go to state 128
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 244
+
+  120 expr: ID LP ArgList RP .
+
+    $default  reduce using rule 120 (expr)
+
+
+State 245
+
+   58 ArgList: ArgList COMMA . expr
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 262
+
+
+State 246
+
+   99 FieldFuntion: ID DOT ID LP . ArgList RP
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    $default  reduce using rule 60 (ArgList)
+
+    ArgList       go to state 263
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 215
+
+
+State 247
+
+   98 FieldFuntion: SELF DOT ID LP . ArgList RP
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    $default  reduce using rule 60 (ArgList)
+
+    ArgList       go to state 264
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 215
+
+
+State 248
+
+  100 FieldFuntion: FIELD DOT ID LP . ArgList RP
+
+    NUM     shift, and go to state 154
+    ID      shift, and go to state 155
+    LP      shift, and go to state 157
+    STRING  shift, and go to state 158
+    INIT    shift, and go to state 159
+    NUL     shift, and go to state 160
+    SELF    shift, and go to state 161
+
+    $default  reduce using rule 60 (ArgList)
+
+    ArgList       go to state 265
+    FIELD         go to state 162
+    FieldFuntion  go to state 163
+    expr          go to state 215
+
+
+State 249
+
+   90 FreeStmt: FREE LP ID RP SEMCL .
+
+    $default  reduce using rule 90 (FreeStmt)
+
+
+State 250
+
+   91 FreeStmt: FREE LP FIELD RP SEMCL .
+
+    $default  reduce using rule 91 (FreeStmt)
+
+
+State 251
+
+   94 DeleteStmt: DELETE LP FIELD RP SEMCL .
+
+    $default  reduce using rule 94 (DeleteStmt)
+
+
+State 252
+
+   89 AllocStmt: FIELD EQUAL ALLOC LP RP . SEMCL
+
+    SEMCL  shift, and go to state 266
+
+
+State 253
+
+   93 NewStmt: FIELD EQUAL NEW LP ID . RP SEMCL
+
+    RP  shift, and go to state 267
+
+
+State 254
+
+   88 AllocStmt: ID EQUAL ALLOC LP RP SEMCL .
+
+    $default  reduce using rule 88 (AllocStmt)
+
+
+State 255
+
+   92 NewStmt: ID EQUAL NEW LP ID RP . SEMCL
+
+    SEMCL  shift, and go to state 268
+
+
+State 256
+
+   63 Slist: Slist . Stmt
+   81 IfStmt: IF LP E RP THEN Slist . ELSE Slist ENDIF SEMCL
+   82       | IF LP E RP THEN Slist . ENDIF SEMCL
+
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    ENDIF     shift, and go to state 269
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    ELSE      shift, and go to state 270
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Stmt          go to state 169
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 257
+
+  106 E: expr EQUAL EQUAL expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 106 (E)
+
+
+State 258
+
+  103 E: expr LT EQUAL expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 103 (E)
+
+
+State 259
+
+  104 E: expr GT EQUAL expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 104 (E)
+
+
+State 260
+
+  105 E: expr NOT EQUAL expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 105 (E)
+
+
+State 261
+
+   63 Slist: Slist . Stmt
+   83 WhileStmt: WHILE LP E RP DO Slist . ENDWHILE SEMCL
+
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    ENDWHILE  shift, and go to state 271
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Stmt          go to state 169
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 262
+
+   58 ArgList: ArgList COMMA expr .
+  107 expr: expr . PLUS expr
+  108     | expr . MUL expr
+  109     | expr . MINUS expr
+  110     | expr . DIV expr
+  111     | expr . MOD expr
+
+    PLUS   shift, and go to state 188
+    MINUS  shift, and go to state 189
+    DIV    shift, and go to state 190
+    MUL    shift, and go to state 191
+    MOD    shift, and go to state 192
+
+    $default  reduce using rule 58 (ArgList)
+
+
+State 263
+
+   58 ArgList: ArgList . COMMA expr
+   99 FieldFuntion: ID DOT ID LP ArgList . RP
+
+    RP     shift, and go to state 272
+    COMMA  shift, and go to state 245
+
+
+State 264
+
+   58 ArgList: ArgList . COMMA expr
+   98 FieldFuntion: SELF DOT ID LP ArgList . RP
+
+    RP     shift, and go to state 273
+    COMMA  shift, and go to state 245
+
+
+State 265
+
+   58 ArgList: ArgList . COMMA expr
+  100 FieldFuntion: FIELD DOT ID LP ArgList . RP
+
+    RP     shift, and go to state 274
+    COMMA  shift, and go to state 245
+
+
+State 266
+
+   89 AllocStmt: FIELD EQUAL ALLOC LP RP SEMCL .
+
+    $default  reduce using rule 89 (AllocStmt)
+
+
+State 267
+
+   93 NewStmt: FIELD EQUAL NEW LP ID RP . SEMCL
+
+    SEMCL  shift, and go to state 275
+
+
+State 268
+
+   92 NewStmt: ID EQUAL NEW LP ID RP SEMCL .
+
+    $default  reduce using rule 92 (NewStmt)
+
+
+State 269
+
+   82 IfStmt: IF LP E RP THEN Slist ENDIF . SEMCL
+
+    SEMCL  shift, and go to state 276
+
+
+State 270
+
+   81 IfStmt: IF LP E RP THEN Slist ELSE . Slist ENDIF SEMCL
+
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Slist         go to state 277
+    Stmt          go to state 128
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 271
+
+   83 WhileStmt: WHILE LP E RP DO Slist ENDWHILE . SEMCL
+
+    SEMCL  shift, and go to state 278
+
+
+State 272
+
+   99 FieldFuntion: ID DOT ID LP ArgList RP .
+
+    $default  reduce using rule 99 (FieldFuntion)
+
+
+State 273
+
+   98 FieldFuntion: SELF DOT ID LP ArgList RP .
+
+    $default  reduce using rule 98 (FieldFuntion)
+
+
+State 274
+
+  100 FieldFuntion: FIELD DOT ID LP ArgList RP .
+
+    $default  reduce using rule 100 (FieldFuntion)
+
+
+State 275
+
+   93 NewStmt: FIELD EQUAL NEW LP ID RP SEMCL .
+
+    $default  reduce using rule 93 (NewStmt)
+
+
+State 276
+
+   82 IfStmt: IF LP E RP THEN Slist ENDIF SEMCL .
+
+    $default  reduce using rule 82 (IfStmt)
+
+
+State 277
+
+   63 Slist: Slist . Stmt
+   81 IfStmt: IF LP E RP THEN Slist ELSE Slist . ENDIF SEMCL
+
+    ID        shift, and go to state 116
+    READ      shift, and go to state 117
+    WRITE     shift, and go to state 118
+    IF        shift, and go to state 119
+    ENDIF     shift, and go to state 279
+    BREAK     shift, and go to state 120
+    CONTINUE  shift, and go to state 121
+    WHILE     shift, and go to state 122
+    RETURN    shift, and go to state 123
+    FREE      shift, and go to state 124
+    SELF      shift, and go to state 125
+    DELETE    shift, and go to state 126
+
+    Stmt          go to state 169
+    InputStmt     go to state 129
+    OutputStmt    go to state 130
+    AsgStmt       go to state 131
+    IfStmt        go to state 132
+    WhileStmt     go to state 133
+    BreakStmt     go to state 134
+    ContinueStmt  go to state 135
+    ReturnStmt    go to state 136
+    AllocStmt     go to state 137
+    FreeStmt      go to state 138
+    NewStmt       go to state 139
+    DeleteStmt    go to state 140
+    FIELD         go to state 141
+
+
+State 278
+
+   83 WhileStmt: WHILE LP E RP DO Slist ENDWHILE SEMCL .
+
+    $default  reduce using rule 83 (WhileStmt)
+
+
+State 279
+
+   81 IfStmt: IF LP E RP THEN Slist ELSE Slist ENDIF . SEMCL
+
+    SEMCL  shift, and go to state 280
+
+
+State 280
+
+   81 IfStmt: IF LP E RP THEN Slist ELSE Slist ENDIF SEMCL .
+
+    $default  reduce using rule 81 (IfStmt)

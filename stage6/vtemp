@@ -1,0 +1,73 @@
+if(functionargflag==0&&t->Arglist==NULL)
+          {
+            p=getfreereg();
+            if(t->Lentry!=NULL)
+              loc=t->Lentry->binding;
+            else
+              loc=t->Gentry->binding;
+            fprintf(outputfile,"MOV R%d, BP\n",p);
+            if(loc>0)
+              fprintf(outputfile,"ADD R%d, %d\n",p,loc);
+            else
+              fprintf(outputfile,"SUB R%d, %d\n",p,(0-loc));
+            fprintf(outputfile,"MOV R%d, [R%d]\n",p,p);
+            return p;
+            break;
+          }
+          else
+          {
+            if(t->varname==NULL)
+            {
+              printf("testing error");
+            }
+            printf(" *%s* ",t->varname);
+            gn=lookup(t->varname);
+            if(gn==NULL&&functionargflag==1)
+            {
+              printf(" 1 \n");
+              p=getfreereg();
+              if(t->Lentry!=NULL)
+                loc=t->Lentry->binding;
+              else
+                loc=t->Gentry->binding;
+              fprintf(outputfile,"MOV R%d, BP\n",p);
+              if(loc>0)
+                fprintf(outputfile,"ADD R%d, %d\n",p,loc);
+              else
+                fprintf(outputfile,"SUB R%d, %d\n",p,(0-loc));
+              fprintf(outputfile,"MOV R%d, [R%d]\n",p,p);
+              return p;
+            }
+            else
+            {
+              functionargflag=1;
+              printf("function");
+              no=-1;
+              for(int i=0;i<Reg->reg;i++)
+              {
+                fprintf(outputfile,"PUSH R%d\n",i);
+                no+=1;
+              }
+              p=getfreereg();
+              tn=t->Arglist;
+              count=0;
+              while(tn!=NULL)
+              {
+                p=generate(tn);
+                fprintf(outputfile,"PUSH R%d\n",p);
+                releasereg();
+                tn=tn->Arglist;
+                count+=1;
+              }
+              printf("count--%dno--%d",count,no);
+              fprintf(outputfile,"PUSH R0\n");
+              fprintf(outputfile,"CALL L%d\n",gn->binding);
+              fprintf(outputfile,"POP R%d\n",p);
+              for(int i=0;i<count;i++)
+                fprintf(outputfile,"POP R0\n");
+              for(int i=no;i>=0;i--)
+                fprintf(outputfile,"POP R%d\n",i);
+              functionargflag=0;
+            }
+            return p;
+          }

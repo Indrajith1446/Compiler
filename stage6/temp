@@ -1,0 +1,76 @@
+if(declflag==0)
+{
+  if(functionflag==1)
+  {
+    lnode=llookup(yytext);
+    if(lnode!=NULL)
+    {
+      yylval.tn=varnode(yytext,lnode,NULL);
+      return VAR;
+    }
+    struct Paramstruct * temp=node->paramlist;
+    temp=checkfor(temp,yytext,ptype);
+    if(temp!=NULL)
+    {
+      printf("+lptest+");
+      nlbindval-=1;
+      linstall(yytext,ptype,nlbindval);
+      yylval.pn=temp;
+      printf("this");
+      return PM;
+    }
+
+    printf("\nSame type and name of arguments is expected\n");
+  }
+  if(fdefflg==0)
+  {
+    node=lookup(yytext);
+    if(node!=NULL)
+    {
+      lhead=NULL;
+      yylval.gn=node;
+      return ID;
+    }
+
+  }
+
+  lnode=llookup(yytext);
+  if(lnode!=NULL)
+  {
+    yylval.tn=varnode(yytext,lnode,NULL);
+    return VAR;
+  }
+
+  int chkflg=checkname(yytext);
+  if(chkflg==1)
+  {
+    printf("test 1");
+    yylval.tn=varnode(yytext,NULL,lookup(yytext));
+    return VAR;
+  }
+  printf("\nimplicit decleration of %s\n",yytext);
+}
+else
+{
+  if(lookup(yytext)!=NULL)
+    printf("SEMANTIC error:Variable of the name  %s already declared",yytext);
+  if(functionflag==0)
+  {
+    if(fdefflg==1)
+    {
+      lbindval+=1;
+      linstall(yytext,1,lbindval);
+      yylval.ln=lhead;
+      return LID;
+    }
+    install(yytext,vtype,1);
+    yylval.gn=Symbolhead;
+    return ID;
+  }
+  else
+  {
+    finstall(yytext,ptype);
+    yylval.pn=paramhead;
+    return PM;
+  }
+}
